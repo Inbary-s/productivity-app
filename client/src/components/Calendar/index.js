@@ -1,4 +1,4 @@
-import React, { useEffect, useState , useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from 'moment';
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
@@ -10,10 +10,11 @@ const localizer = momentLocalizer(moment);
 const DnDCalendar = withDragAndDrop(Calendar);
 const DnDtasks = withDragAndDrop(Tasks);
 
+
 export default () => {
-    const {goals} = useContext(userContext);
+    const { goals } = useContext(userContext);
     const [modGoals, setModGoals] = useState(goals);
-    console.log(goals)
+    console.log("Goals from calendar page: ", goals)
     let [calendarEvent, setCalendarEvent] = useState({
         events: [
             {
@@ -22,17 +23,21 @@ export default () => {
                 title: "Build this thingy!"
             }
         ]
-    }) 
-    
-    useEffect(()=>{
+    })
+
+    useEffect(() => {
         console.log(goals)
         const tasks = [];
-        goals.map(goal=> goal.Tasks.map(a=> {tasks.push({title:a.name, start: moment().toDate(),
-            end: moment().toDate()})}))
-        const tasksWID = tasks.map((a,i)=> {return {...a, id:i}})
+        goals.map(goal => goal.Tasks.map(a => {
+            tasks.push({
+                title: a.name, start: moment().toDate(),
+                end: moment().toDate()
+            })
+        }))
+        const tasksWID = tasks.map((a, i) => { return { ...a, id: i } })
 
-        setCalendarEvent({events:tasksWID})
-    },[goals])
+        setCalendarEvent({ events: tasksWID })
+    }, [goals])
 
     const onEventResize = ({ event, start, end, allDay }) => {
         let newEvents = calendarEvent.events;
@@ -44,80 +49,29 @@ export default () => {
 
     }
 
-   const onEventDrop = ({ event, start, end, allDay }) => {
-       let newEvents = calendarEvent.events;
+    const onEventDrop = ({ event, start, end, allDay }) => {
+        let newEvents = calendarEvent.events;
         newEvents[event.id].start = start;
         newEvents[event.id].end = end;
-    setCalendarEvent({
-        events: newEvents
-    })
+        setCalendarEvent({
+            events: newEvents
+        })
     }
 
-    return(
-        <>
-        <div className="Tasks">
-            <DnDtasks
-            events={calendarEvent.events}
-            />
-    
-        </div>
+    return (
+
         <div className="Calendar">
             <DnDCalendar
-                defaultDate = { moment().toDate() }
-                defaultView = "month"
-                localizer = { localizer }
-                events = { calendarEvent.events }
-                onEventDrop = { onEventDrop }
-                onEventResize = { onEventResize }
+                defaultDate={moment().toDate()}
+                defaultView="month"
+                localizer={localizer}
+                events={calendarEvent.events}
+                onEventDrop={onEventDrop}
+                onEventResize={onEventResize}
                 resizable
-                style = {{ height: "100vh" }}
+                style={{ height: "100vh" }}
             />
         </div>
-        </>
+
     )
 }
-
-// class CalendarEvent extends Component {
-//     state = {
-//       events: [
-//         {
-//           start: moment().toDate(),
-//           end: moment()
-//             .add(1, "days")
-//             .toDate(),
-//           title: "Some title"
-//         }
-//       ]
-//     };
-  
-//     onEventResize = (type, { event, start, end, allDay }) => {
-//       this.setState(state => {
-//         state.events[0].start = start;
-//         state.events[0].end = end;
-//         return { events: state.events };
-//       });
-//     };
-  
-//     onEventDrop = ({ event, start, end, allDay }) => {
-//       console.log(start);
-//     };
-  
-//     render() {
-//       return (
-//         <div className="CalendarEvent">
-//           <DnDCalendar
-//             defaultDate={moment().toDate()}
-//             defaultView="month"
-//             events={this.state.events}
-//             localizer={localizer}
-//             onEventDrop={this.onEventDrop}
-//             onEventResize={this.onEventResize}
-//             resizable
-//             style={{ height: "100vh" }}
-//           />
-//         </div>
-//       );
-//     }
-//   }
-  
-//   export default CalendarEvent;yy

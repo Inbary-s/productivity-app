@@ -1,18 +1,18 @@
 import React, { useState, useContext } from 'react'
 import userContext from '../../utils/userContext';
-import { useHistory } from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import API from '../../utils/API'
 
-export default () => {
+export default ()=>{
 	let history = useHistory();
-	const [loginState, setLoginState] = useState({
-		username: '',
-		password: '',
-		email: '',
-		login: 0
-	})
+	 const [loginState, setLoginState] = useState({
+			username: '',
+			password: '',
+			email:'',
+			login: 0
+		})
 
-	const { user, setUser } = useContext(userContext)
+		const {user, setUser} = useContext(userContext)
 
 	const handleChange = event => {
 		setLoginState({
@@ -21,18 +21,16 @@ export default () => {
 		})
 	}
 
-	const handleSubmit = event => {
-		console.log('sign-up handleSubmit, username: ')
-		console.log(loginState.username)
+	const handleSubmit= event => {
 		event.preventDefault()
 
 		//request to server to add a new username/password
 		API.loginSignup(loginState)
 			.then(response => {
 				console.log(response)
-				response.err ? console.log(response.msg) :
-					setUser(response.data);
-				history.push("/")
+				response.err ? console.log(response.msg):
+				setUser(response.data);
+				history.push("/goals")
 			}).catch(error => {
 				console.log(error)
 			})
@@ -42,7 +40,7 @@ export default () => {
 		<div className="SignupForm">
 			<h4>{loginState.login ? 'Log In' : 'Sign up'}</h4>
 
-			<button className="button" onClick={() => setLoginState({ ...loginState, login: !loginState.login })}>
+			<button onClick={()=>setLoginState({...loginState, login: !loginState.login})}>
 				{loginState.login ? 'New user? Sign up now!' : 'Already have an account? Log In!'}
 			</button>
 			<form className="form-horizontal">
@@ -92,10 +90,10 @@ export default () => {
 				<div className="form-group ">
 					<div className="col-7"></div>
 					<button
-						className="btn btn-primary col-1 col-mr-auto button"
-						onClick={(e) => handleSubmit(e)}
+						className="btn btn-primary col-1 col-mr-auto"
+						onClick={(e)=>handleSubmit(e)}
 						type="submit"
-					>{loginState.login ? 'Log In' : 'Sign up'}</button>
+					>{loginState.login ? 'Log In': 'Sign up'}</button>
 				</div>
 			</form>
 		</div>
